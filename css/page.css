@@ -1,0 +1,28 @@
+div#relative{
+  position:relative;
+}
+
+div#thisDiv{
+  position:absolute;
+  left:50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+}
+
+th {
+    background-color: grey;
+}
+
+/* Pagination links */
+.pagination a {
+  background-color: white;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+/* Style the active/current link */
+.pagination a.active {
+  background-color: black;
+}

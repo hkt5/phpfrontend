@@ -7,8 +7,18 @@
  */
 namespace SilenceCloud\SilenceFrontEnd;
 
-return [
-    ['GET', '/', function(){
-        echo "Hello";
-    }]
+use Http\HttpRequest;
+use Http\HttpResponse;
+use SilenceCloud\SilenceFrontEnd\Core\Controllers\Ths;
+
+$request = new HttpRequest($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
+$response = new HttpResponse;
+
+$route = [
+    ['GET', '/', function() use ($request, $response) {
+        $ths = new Ths($request, $response);
+        $ths->getFirstPage();
+    }],
 ];
+
+return $route;
