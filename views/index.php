@@ -19,6 +19,7 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/page.css" rel="stylesheet">
+    <link href="/css/pagination.css" rel="stylesheet">
 </head>
 
 <body>
@@ -58,53 +59,47 @@
                     <th scope="col" class="col-md-2">Value</th>
                 </tr>
                 </thead>
-                <tbody>
-                <?php
-                foreach($data['page']['data'] as $key => $value) {
-                    ?>
-                    <tr>
-                        <td scope="row" class="col-md-5"><?php echo $value['payment_supplier']; ?></td>
-                        <td class="col-md-3"><?php echo $value['payment_ref']; ?></td>
-                        <td class="col-md-2"><?php echo $value['payment_cost_rating']; ?></td>
-                        <td class="col-md-2"><?php echo $value['payment_amount']; ?></td>
-                    </tr>
-                    <?php
-                }
-                ?>
+                <tbody id="rows">
                 </tbody>
             </table>
-
+            <div id="pagination-demo"></div>
         </div>
     </div>
 </div> <!-- /container -->
-<div id="relative">
-    <div id="thisDiv">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <?php
-                for($current = 1; $current <= 4; $current++) {
-                    ?>
-                    <li class="page-item <?php if($current == $data['page']['activePage']){ echo 'active'; } ?>"><a class="pagination page-link" href="/?page=<?php echo $current;?>"><?php echo $current;?></a></li>
-                    <?php
-                }
-                ?>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
-    </div>
-</div>
-
+<div class=".demo"></div>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 <script src="/js/bootstrap.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="/js/ie10-bug.js"></script>
-<script src="/js/pagination.js"></script>
+<script src="/js/pagination.min.js"></script>
+<script>
+    $('#pagination-demo').twbsPagination({
+        totalPages: <?php echo $data['page']['pages']; ?>,
+        visiblePages: 7,
+        onPageClick: function (event, page) {
+            $.ajax({
+                url: "/pages/?page=" + page
+            }).done(function(response) {
+                $("#rows").empty();
+                console.log(JSON.parse(response));
+                var result = JSON.parse(response);
+                $.each(result, function (index, value) {
+                    var html = "<tr id=\"result\"><td scope=\"row\" class=\"col-md-5\">"+value.payment_supplier+"</td>" +
+                        "<td class=\"col-md-3\">"+value.payment_ref+"</td>" +
+                        "<td class=\"col-md-2\">"+value.payment_cost_rating+"</td>" +
+                        "<td class=\"col-md-2\">"+value.payment_amount+"</td></tr>"
+                    console.log(html);
+                    $("#rows").append(html);
+                })
+            });
+        }
+    });
+</script>
 </body>
 </html>
 

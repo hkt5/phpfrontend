@@ -19,6 +19,10 @@ $route = [
         $ths = new Ths($request, $response);
         $ths->getFirstPage();
     }],
+    ['GET', '/pages/',function() use ($request, $response) {
+        $ths = new Ths($request, $response);
+        $ths->getPage();
+    }]
 ];
 
 return $route;

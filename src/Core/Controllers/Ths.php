@@ -32,7 +32,7 @@ class Ths
 
         $queryParametrs = $this->request->getQueryParameters();
 
-        if($queryParametrs['page'] != null){
+        if(isset($_GET['page'])  && $queryParametrs['page'] != null){
             $first = ($queryParametrs['page']-1)*5;
             $query = "SELECT * FROM payments LIMIT 5 OFFSET $first;";
             $activePage = $queryParametrs['page'];
@@ -48,6 +48,22 @@ class Ths
         $results['activePage'] = $activePage;
         $page = new SimpleTemplate("./views/index.php");
         $page->assign('page', $results);
+    }
+
+    public function getPage(){
+        $queryParametrs = $this->request->getQueryParameters();
+
+        if(isset($_GET['page'])  && $queryParametrs['page'] != null){
+            $first = ($queryParametrs['page']-1)*5;
+            $query = "SELECT * FROM payments LIMIT 5 OFFSET $first;";
+        } else {
+            $query = "SELECT * FROM payments LIMIT 5;";
+        }
+
+        $wrapper = new Wrapper();
+        $result = $wrapper->get_results($query);
+
+        echo json_encode($result);
     }
 
 }
